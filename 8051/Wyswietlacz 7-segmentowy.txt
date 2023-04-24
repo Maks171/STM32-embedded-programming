@@ -1,0 +1,49 @@
+org 0
+
+LJMP start ; skocz do start
+
+ORG 0Bh
+
+JMP timer ; skocz do timer
+
+org 30h
+
+start:
+	MOV A, #0 ; Ustaw 0 w A (akumulatorze)
+	MOV TMOD, #02h
+	MOV TH0, #01h 
+	SETB ET0 ; Zezwolenie na przerwania od timerów
+	SETB EA ; Ogólne zezwolenie na przerwania
+	SETB TR0 ; Ustawienie flagi pracy timera na 1
+	JMP main ; Skok do main
+timer:
+	display1:
+		CJNE A, #0, DISPLAY2 ; jeśli A nierówne 0 skocz do display2
+		MOV P1, #0 ; kopiuj 0 do P1
+		MOV P1, #1000b ; wybór pierwszego wyświetlacza
+		MOV P0, #11111001b ; wyświetlenie numeru jeden
+		INC A ; zwiększ A o jeden
+		RETI ; koniec procedury obsługi przerwań
+	display2:
+		CJNE A, #1, DISPLAY3 ; jeśli A nierówne 1 skocz do display3
+		MOV P1, #0 ; kopiuj 0 do P1
+		MOV P1, #0100b ; wybór drugiego wyświetlacza
+		MOV P0, #10100100b ; wyświetlenie numeru dwa
+		INC A ; zwiększ A o jeden
+		RETI ; koniec procedury obsługi przerwań
+	display3:
+		CJNE A, #2, DISPLAY4 ; jeśli A nierówne 2 skocz do display4
+		MOV P1, #0 ; kopiuj 0 do P1
+		MOV P1, #0010b ; wybór trzeciego wyświetlacza
+		MOV P0, #10110000b ; wyświetlenie numeru trzy	
+		INC A ; zwiększ A o jeden
+		RETI ; koniec procedury obsługi przerwań
+	display4:
+		MOV P1, #0 ; kopiuj 0 do P1
+		MOV P1, #0001b ; wybór czwartego wyświetlacza
+		MOV P0, #10011001b ; wyświetlenie numery cztery
+		MOV A, #0 ; kopiuj zero do A
+		RETI ; koniec procedury obsługi przerwań
+main:
+	JMP main ; skocz do main
+end

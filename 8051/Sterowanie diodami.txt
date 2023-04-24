@@ -1,0 +1,31 @@
+org 0
+
+LJMP start ; skocz do start
+
+ORG 100h
+
+start:
+mov P0, #0x00 ; wpisanie do P0 wartości 0 - zgaszenie wszystkich diód
+mov P1, #0x55 ; zaświecenie do drugiej diody zaczynając od drugiej
+mov P2, #0xF0 ; zaświecenie pierwszych czterech diód
+mov P3, #0x55 ; zaświecenie do drugiej diody zaczynając od drugiej
+
+loop: ; pętla realizuje naprzemienne miganie co drugiej diody w czwartej kolumnie
+mov P3, #0x55 ; zaświecenie do drugiej diody zaczynając od drugiej
+mov R1, #255 ; wpisz do rejestru R1 255, wprowadzenie opóźnienia do migania
+loop2:
+mov R0, #0xFF ; wpisz do rejestru R0 255, wprowadzenie opóźnienia do migania
+loop1:
+DJNZ R0, loop1 ; zmniejsz i skocz do loop1 jesli nie równe 0
+DJNZ R1, loop2 ; zmniejsz i skocz do loop2 jesli nie równe 0
+mov P3, #0xAA ; zaświecenie do drugiej diody zaczynając od pierwszej
+mov R1, #125 ; wpisz do R1 125, wprowadzenie mniejszego opóźnienia, niesynchroniczne miganie
+loop4:
+mov R0, #0xFF ; wpisz do rejestru R0 255, wprowadzenie opóźnienia do migania
+loop3:
+DJNZ R0, loop3 ; zmniejsz i skocz do loop3 jesli nie równe 0
+DJNZ R1, loop4 ; zmniejsz i skocz do loop4 jesli nie równe 0
+LJMP loop ; skocz do loop
+
+
+end
